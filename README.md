@@ -7,7 +7,7 @@ This document describes the main authentication and user management endpoints fo
 ## Base URL
 
 ```
-http://localhost:5000/
+https://wholesale-backend-cnfg.onrender.com/
 ```
 
 ---
@@ -17,6 +17,9 @@ http://localhost:5000/
 ### 1. Register (Customer, Salesman, Owner)
 
 **POST** `/auth/register`
+
+**Full URL:**  
+`https://wholesale-backend-cnfg.onrender.com/auth/register`
 
 #### Request Body
 
@@ -64,6 +67,9 @@ http://localhost:5000/
 ### 2. Login (All Roles)
 
 **POST** `/auth/login`
+
+**Full URL:**  
+`https://wholesale-backend-cnfg.onrender.com/auth/login`
 
 #### Request Body
 
@@ -199,7 +205,7 @@ Show these fields:
 ### Register Owner
 
 ```http
-POST /auth/register
+POST https://wholesale-backend-cnfg.onrender.com/auth/register
 Content-Type: application/json
 
 {
@@ -216,7 +222,7 @@ Content-Type: application/json
 ### Register Customer
 
 ```http
-POST /auth/register
+POST https://wholesale-backend-cnfg.onrender.com/auth/register
 Content-Type: application/json
 
 {
@@ -231,7 +237,7 @@ Content-Type: application/json
 ### Login
 
 ```http
-POST /auth/login
+POST https://wholesale-backend-cnfg.onrender.com/auth/login
 Content-Type: application/json
 
 {
