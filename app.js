@@ -24,17 +24,3 @@ app.get("/", (req, res) => {
 app.use(errorHandler);
 
 module.exports = app;
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use("/auth", authRoutes);
-// ...mount other routes...
-
-app.get("/", (req, res) => {
-  res.send("Smart Wholesale Shop API is running.");
-});
-
-app.use(errorHandler);
-
-module.exports = app;
