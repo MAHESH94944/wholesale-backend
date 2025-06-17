@@ -1,4 +1,4 @@
-const passport = require("passport");
+// (file not needed, can be deleted)
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
 
