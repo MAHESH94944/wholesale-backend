@@ -5,10 +5,19 @@ const router = express.Router();
 
 // Registration route
 router.post("/register", async (req, res) => {
-  const { name, email, password, role, shopId, shopName, shopType, address } =
-    req.body;
+  const {
+    name,
+    email,
+    password,
+    role,
+    shopId,
+    shopName,
+    shopType,
+    address,
+    enterpriseName,
+  } = req.body;
   try {
-    if (!name || !email || !password || !role || !shopId) {
+    if (!name || !email || !password || !role) {
       return res.status(400).json({ message: "All fields are required." });
     }
     if (!["customer", "salesman", "owner"].includes(role)) {
@@ -17,6 +26,11 @@ router.post("/register", async (req, res) => {
 
     // Owner registration
     if (role === "owner") {
+      if (!shopId) {
+        return res
+          .status(400)
+          .json({ message: "shopId is required for owner." });
+      }
       if (!shopName) {
         return res
           .status(400)
@@ -59,7 +73,35 @@ router.post("/register", async (req, res) => {
         .json({ message: "Owner registered successfully." });
     }
 
-    // Customer or Salesman registration
+    // Salesman registration
+    if (role === "salesman") {
+      if (!enterpriseName) {
+        return res
+          .status(400)
+          .json({ message: "enterpriseName is required for salesman." });
+      }
+      const existingEmail = await User.findOne({ email });
+      if (existingEmail) {
+        return res.status(400).json({ message: "Email already registered." });
+      }
+      const salesman = await User.create({
+        name,
+        email,
+        password,
+        role,
+        enterpriseName,
+      });
+      return res
+        .status(201)
+        .json({ message: "Salesman registered successfully." });
+    }
+
+    // Customer registration
+    if (!shopId) {
+      return res
+        .status(400)
+        .json({ message: "shopId is required for customer." });
+    }
     const shopOwner = await User.findOne({ shopId, role: "owner" });
     if (!shopOwner) {
       return res
@@ -118,8 +160,18 @@ router.post("/login", async (req, res) => {
           address: user.address,
         },
       });
+    } else if (role === "salesman") {
+      return res.json({
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          enterpriseName: user.enterpriseName,
+        },
+      });
     } else {
-      // customer or salesman
+      // customer
       const shopOwner = await User.findOne({
         shopId: user.shopId,
         role: "owner",

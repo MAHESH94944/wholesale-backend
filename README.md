@@ -38,7 +38,8 @@ https://wholesale-backend-cnfg.onrender.com/
   }
   ```
 
-- For **Customer/Salesman**:
+- For **Customer**:
+
   ```json
   {
     "name": "Customer Name",
@@ -46,6 +47,17 @@ https://wholesale-backend-cnfg.onrender.com/
     "password": "password123",
     "role": "customer", // or "salesman"
     "shopId": "shop001"
+  }
+  ```
+
+- For **Salesman**:
+  ```json
+  {
+    "name": "Salesman Name",
+    "email": "salesman@example.com",
+    "password": "salesman123",
+    "role": "salesman",
+    "enterpriseName": "ABC Enterprises"
   }
   ```
 
@@ -103,6 +115,7 @@ https://wholesale-backend-cnfg.onrender.com/
   ```
 
 - **Customer/Salesman:**
+
   ```json
   {
     "token": "JWT_TOKEN_HERE",
@@ -114,6 +127,19 @@ https://wholesale-backend-cnfg.onrender.com/
       "shopName": "Super Mart",
       "shopType": "RetailPackStore",
       "address": "123 Main Street, City, State"
+    }
+  }
+  ```
+
+- **Salesman:**
+  ```json
+  {
+    "token": "JWT_TOKEN_HERE",
+    "user": {
+      "name": "Salesman Name",
+      "email": "salesman@example.com",
+      "role": "salesman",
+      "enterpriseName": "ABC Enterprises"
     }
   }
   ```
@@ -190,7 +216,7 @@ Show these fields:
 - email
 - password
 - role (must be "salesman")
-- shopId (must be an existing shopId created by an owner)
+- enterpriseName
 
 **Example JSON:**
 
@@ -200,7 +226,7 @@ Show these fields:
   "email": "vishal.salesman@example.com",
   "password": "vishal1234",
   "role": "salesman",
-  "shopId": "shop001"
+  "enterpriseName": "Vishal Distributors"
 }
 ```
 
@@ -246,6 +272,21 @@ Content-Type: application/json
   "password": "password123",
   "role": "customer",
   "shopId": "shop001"
+}
+```
+
+### Register Salesman
+
+```http
+POST https://wholesale-backend-cnfg.onrender.com/auth/register
+Content-Type: application/json
+
+{
+  "name": "Salesman Name",
+  "email": "salesman@example.com",
+  "password": "salesman123",
+  "role": "salesman",
+  "enterpriseName": "ABC Enterprises"
 }
 ```
 
@@ -325,6 +366,101 @@ curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/login \
 ```
 
 If you get a success response, your endpoint is working!
+
+---
+
+## Postman API Endpoint Check Data
+
+### Register Owner
+
+**POST** `https://wholesale-backend-cnfg.onrender.com/auth/register`
+
+```json
+{
+  "name": "Owner Name",
+  "email": "owner@example.com",
+  "password": "password123",
+  "role": "owner",
+  "shopId": "shop001",
+  "shopName": "Super Mart",
+  "shopType": "RetailPackStore",
+  "address": "123 Main Street, City, State"
+}
+```
+
+---
+
+### Register Customer
+
+**POST** `https://wholesale-backend-cnfg.onrender.com/auth/register`
+
+```json
+{
+  "name": "Customer Name",
+  "email": "customer@example.com",
+  "password": "password123",
+  "role": "customer",
+  "shopId": "shop001"
+}
+```
+
+---
+
+### Register Salesman
+
+**POST** `https://wholesale-backend-cnfg.onrender.com/auth/register`
+
+```json
+{
+  "name": "Salesman Name",
+  "email": "salesman@example.com",
+  "password": "salesman123",
+  "role": "salesman",
+  "enterpriseName": "ABC Enterprises"
+}
+```
+
+---
+
+### Login Owner
+
+**POST** `https://wholesale-backend-cnfg.onrender.com/auth/login`
+
+```json
+{
+  "email": "owner@example.com",
+  "password": "password123",
+  "role": "owner"
+}
+```
+
+---
+
+### Login Customer
+
+**POST** `https://wholesale-backend-cnfg.onrender.com/auth/login`
+
+```json
+{
+  "email": "customer@example.com",
+  "password": "password123",
+  "role": "customer"
+}
+```
+
+---
+
+### Login Salesman
+
+**POST** `https://wholesale-backend-cnfg.onrender.com/auth/login`
+
+```json
+{
+  "email": "salesman@example.com",
+  "password": "salesman123",
+  "role": "salesman"
+}
+```
 
 ---
 

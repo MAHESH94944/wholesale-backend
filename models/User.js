@@ -10,7 +10,12 @@ const userSchema = new mongoose.Schema({
     enum: ["customer", "salesman", "owner"],
     required: true,
   },
-  shopId: { type: String, required: true },
+  shopId: {
+    type: String,
+    required: function () {
+      return this.role === "owner" || this.role === "customer";
+    },
+  },
   shopName: { type: String }, // required only for owner
   shopType: {
     type: String,
@@ -23,6 +28,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: function () {
       return this.role === "owner";
+    },
+  },
+  enterpriseName: {
+    type: String,
+    required: function () {
+      return this.role === "salesman";
     },
   },
   googleId: String,
