@@ -5,7 +5,8 @@ const router = express.Router();
 
 // Registration route
 router.post("/register", async (req, res) => {
-  const { name, email, password, role, shopId, shopName, shopType } = req.body;
+  const { name, email, password, role, shopId, shopName, shopType, address } =
+    req.body;
   try {
     if (!name || !email || !password || !role || !shopId) {
       return res.status(400).json({ message: "All fields are required." });
@@ -25,12 +26,15 @@ router.post("/register", async (req, res) => {
         !shopType ||
         !["RetailPackStore", "BulkRationStore"].includes(shopType)
       ) {
+        return res.status(400).json({
+          message:
+            "shopType is required for owner and must be either 'RetailPackStore' or 'BulkRationStore'.",
+        });
+      }
+      if (!address) {
         return res
           .status(400)
-          .json({
-            message:
-              "shopType is required for owner and must be either 'RetailPackStore' or 'BulkRationStore'.",
-          });
+          .json({ message: "address is required for owner." });
       }
       const existingShop = await User.findOne({ shopId, role: "owner" });
       if (existingShop) {
@@ -48,6 +52,7 @@ router.post("/register", async (req, res) => {
         shopId,
         shopName,
         shopType,
+        address,
       });
       return res
         .status(201)
@@ -110,6 +115,7 @@ router.post("/login", async (req, res) => {
           shopId: user.shopId,
           shopName: user.shopName,
           shopType: user.shopType,
+          address: user.address,
         },
       });
     } else {
@@ -127,6 +133,7 @@ router.post("/login", async (req, res) => {
           shopId: user.shopId,
           shopName: shopOwner ? shopOwner.shopName : "",
           shopType: shopOwner ? shopOwner.shopType : "",
+          address: shopOwner ? shopOwner.address : "",
         },
       });
     }

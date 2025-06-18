@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
       return this.role === "owner";
     },
   },
+  address: {
+    type: String,
+    required: function () {
+      return this.role === "owner";
+    },
+  },
   googleId: String,
 });
 

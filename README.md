@@ -24,6 +24,7 @@ https://wholesale-backend-cnfg.onrender.com/
 #### Request Body
 
 - For **Owner**:
+
   ```json
   {
     "name": "Owner Name",
@@ -32,7 +33,8 @@ https://wholesale-backend-cnfg.onrender.com/
     "role": "owner",
     "shopId": "shop001",
     "shopName": "Super Mart",
-    "shopType": "RetailPackStore" // or "BulkRationStore"
+    "shopType": "RetailPackStore", // or "BulkRationStore"
+    "address": "123 Main Street, City, State"
   }
   ```
 
@@ -84,6 +86,7 @@ https://wholesale-backend-cnfg.onrender.com/
 #### Success Response
 
 - **Owner:**
+
   ```json
   {
     "token": "JWT_TOKEN_HERE",
@@ -93,7 +96,8 @@ https://wholesale-backend-cnfg.onrender.com/
       "role": "owner",
       "shopId": "shop001",
       "shopName": "Super Mart",
-      "shopType": "RetailPackStore"
+      "shopType": "RetailPackStore",
+      "address": "123 Main Street, City, State"
     }
   }
   ```
@@ -108,7 +112,8 @@ https://wholesale-backend-cnfg.onrender.com/
       "role": "customer",
       "shopId": "shop001",
       "shopName": "Super Mart",
-      "shopType": "RetailPackStore"
+      "shopType": "RetailPackStore",
+      "address": "123 Main Street, City, State"
     }
   }
   ```
@@ -126,6 +131,7 @@ When a user opens the registration form, they must first select their **role**. 
 ### 1. Owner Registration
 
 Show these fields:
+
 - name
 - email
 - password
@@ -133,8 +139,10 @@ Show these fields:
 - shopId (unique for each shop)
 - shopName
 - shopType (select: "RetailPackStore" or "BulkRationStore")
+- address
 
 **Example JSON:**
+
 ```json
 {
   "name": "Rahul Deshmukh",
@@ -143,7 +151,8 @@ Show these fields:
   "role": "owner",
   "shopId": "shop101",
   "shopName": "Deshmukh Retail Center",
-  "shopType": "RetailPackStore"
+  "shopType": "RetailPackStore",
+  "address": "123 Main Street, Pune, Maharashtra"
 }
 ```
 
@@ -152,6 +161,7 @@ Show these fields:
 ### 2. Customer Registration
 
 Show these fields:
+
 - name
 - email
 - password
@@ -159,6 +169,7 @@ Show these fields:
 - shopId (must be an existing shopId created by an owner)
 
 **Example JSON:**
+
 ```json
 {
   "name": "Amit Joshi",
@@ -174,6 +185,7 @@ Show these fields:
 ### 3. Salesman Registration
 
 Show these fields:
+
 - name
 - email
 - password
@@ -181,6 +193,7 @@ Show these fields:
 - shopId (must be an existing shopId created by an owner)
 
 **Example JSON:**
+
 ```json
 {
   "name": "Vishal Singh",
@@ -193,7 +206,8 @@ Show these fields:
 
 ---
 
-**Note:**  
+**Note:**
+
 - The frontend should dynamically show/hide fields based on the selected role.
 - For "owner", both `shopName` and `shopType` are required.
 - For "customer" and "salesman", only `shopId` is required (must be valid).
@@ -215,7 +229,8 @@ Content-Type: application/json
   "role": "owner",
   "shopId": "shop001",
   "shopName": "Super Mart",
-  "shopType": "RetailPackStore"
+  "shopType": "RetailPackStore",
+  "address": "123 Main Street, City, State"
 }
 ```
 
@@ -246,6 +261,70 @@ Content-Type: application/json
   "role": "owner"
 }
 ```
+
+---
+
+## How to Test Owner Registration & Login
+
+You can test the owner registration and login endpoints using Postman, Thunder Client, or `curl`.
+
+### Register Owner
+
+- **Endpoint:**  
+  `POST https://wholesale-backend-cnfg.onrender.com/auth/register`
+- **Headers:**  
+  `Content-Type: application/json`
+- **Body Example:**
+  ```json
+  {
+    "name": "Owner Name",
+    "email": "owner@example.com",
+    "password": "password123",
+    "role": "owner",
+    "shopId": "shop001",
+    "shopName": "Super Mart",
+    "shopType": "RetailPackStore",
+    "address": "123 Main Street, City, State"
+  }
+  ```
+
+### Login Owner
+
+- **Endpoint:**  
+  `POST https://wholesale-backend-cnfg.onrender.com/auth/login`
+- **Headers:**  
+  `Content-Type: application/json`
+- **Body Example:**
+  ```json
+  {
+    "email": "owner@example.com",
+    "password": "password123",
+    "role": "owner"
+  }
+  ```
+
+**How to check:**
+
+- Use Postman or similar tool to send the above requests.
+- On success, you will get a JSON response with a message (for registration) or a JWT token and user/shop info (for login).
+- If there are errors, you will get a JSON error message.
+
+**Tip:**  
+You can also use `curl` from the command line:
+
+```sh
+curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Owner Name","email":"owner@example.com","password":"password123","role":"owner","shopId":"shop001","shopName":"Super Mart","shopType":"RetailPackStore","address":"123 Main Street, City, State"}'
+```
+
+```sh
+curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"owner@example.com","password":"password123","role":"owner"}'
+```
+
+If you get a success response, your endpoint is working!
 
 ---
 
