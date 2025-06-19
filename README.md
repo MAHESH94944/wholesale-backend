@@ -1,6 +1,6 @@
 # Smart Wholesale Shop Backend API
 
-This document describes the main authentication and user management endpoints for the Smart Wholesale Shop backend. Use these endpoints to integrate the frontend UI.
+This document describes all available endpoints for authentication, user management, and product management in the Smart Wholesale Shop backend.
 
 ---
 
@@ -14,17 +14,14 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ## Authentication Endpoints
 
-### 1. Register (Customer, Salesman, Owner)
+### Register (Customer, Salesman, Owner)
 
-**POST** `/auth/register`
-
-**Full URL:**  
-`https://wholesale-backend-cnfg.onrender.com/auth/register`
+**POST** `/auth/register`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/auth/register`
 
 #### Request Body
 
-- For **Owner**:
-
+- **Owner**
   ```json
   {
     "name": "Owner Name",
@@ -33,24 +30,21 @@ https://wholesale-backend-cnfg.onrender.com/
     "role": "owner",
     "shopId": "shop001",
     "shopName": "Super Mart",
-    "shopType": "RetailPackStore", // or "BulkRationStore"
+    "shopType": "RetailPackStore",
     "address": "123 Main Street, City, State"
   }
   ```
-
-- For **Customer**:
-
+- **Customer**
   ```json
   {
     "name": "Customer Name",
     "email": "customer@example.com",
     "password": "password123",
-    "role": "customer", // or "salesman"
+    "role": "customer",
     "shopId": "shop001"
   }
   ```
-
-- For **Salesman**:
+- **Salesman**
   ```json
   {
     "name": "Salesman Name",
@@ -63,14 +57,9 @@ https://wholesale-backend-cnfg.onrender.com/
 
 #### Success Response
 
-- **Owner:**
-  ```json
-  { "message": "Owner registered successfully." }
-  ```
-- **Customer/Salesman:**
-  ```json
-  { "message": "User registered successfully." }
-  ```
+- `{ "message": "Owner registered successfully." }`
+- `{ "message": "User registered successfully." }`
+- `{ "message": "Salesman registered successfully." }`
 
 #### Error Responses
 
@@ -78,12 +67,10 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ---
 
-### 2. Login (All Roles)
+### Login (All Roles)
 
-**POST** `/auth/login`
-
-**Full URL:**  
-`https://wholesale-backend-cnfg.onrender.com/auth/login`
+**POST** `/auth/login`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/auth/login`
 
 #### Request Body
 
@@ -96,8 +83,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 #### Success Response
 
-- **Owner:**
-
+- **Owner**
   ```json
   {
     "token": "JWT_TOKEN_HERE",
@@ -112,9 +98,7 @@ https://wholesale-backend-cnfg.onrender.com/
     }
   }
   ```
-
-- **Customer:**
-
+- **Customer**
   ```json
   {
     "token": "JWT_TOKEN_HERE",
@@ -129,8 +113,7 @@ https://wholesale-backend-cnfg.onrender.com/
     }
   }
   ```
-
-- **Salesman:**
+- **Salesman**
   ```json
   {
     "token": "JWT_TOKEN_HERE",
@@ -146,6 +129,113 @@ https://wholesale-backend-cnfg.onrender.com/
 #### Error Responses
 
 - Invalid credentials, missing fields, etc.
+
+---
+
+## Product Endpoints
+
+### Create Product (Owner Only)
+
+**POST** `/products`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/products`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: multipart/form-data`
+
+**Body (form-data):**
+
+- `title`: string (required)
+- `image`: file (**png, jpg, jpeg, webp, gif, svg**; required)
+- `price`: number (required)
+- `discount`: number (optional)
+- `description`: string (optional)
+
+**Success Response:**
+
+```json
+{
+  "message": "Product created successfully.",
+  "product": {
+    "_id": "PRODUCT_ID",
+    "title": "Premium Basmati Rice",
+    "image": "data:image/jpeg;base64,...",
+    "price": 1200,
+    "discount": 10,
+    "description": "High quality basmati rice, 5kg pack.",
+    "owner": "OWNER_ID",
+    "createdAt": "2024-06-17T12:00:00.000Z",
+    "__v": 0
+  }
+}
+```
+
+---
+
+### Get My Products (Owner Only)
+
+**GET** `/products`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/products`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+
+**Response:**
+
+```json
+{
+  "products": [
+    {
+      "_id": "PRODUCT_ID",
+      "title": "Premium Basmati Rice",
+      "image": "data:image/jpeg;base64,...",
+      "price": 1200,
+      "discount": 10,
+      "description": "High quality basmati rice, 5kg pack.",
+      "owner": "OWNER_ID",
+      "createdAt": "2024-06-17T12:00:00.000Z",
+      "__v": 0
+    }
+    // ...more products
+  ]
+}
+```
+
+---
+
+### Get All Products (Public)
+
+**GET** `/products/all`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/products/all`
+
+**Response:**
+
+```json
+{
+  "products": [
+    {
+      "_id": "PRODUCT_ID",
+      "title": "Premium Basmati Rice",
+      "image": "data:image/jpeg;base64,...",
+      "price": 1200,
+      "discount": 10,
+      "description": "High quality basmati rice, 5kg pack.",
+      "owner": "OWNER_ID",
+      "createdAt": "2024-06-17T12:00:00.000Z",
+      "__v": 0
+    }
+    // ...more products
+  ]
+}
+```
+
+---
+
+## (Planned) Order & Slot Endpoints
+
+> Endpoints for orders and slots will be added as implemented.
 
 ---
 
@@ -235,7 +325,8 @@ Show these fields:
 
 - The frontend should dynamically show/hide fields based on the selected role.
 - For "owner", both `shopName` and `shopType` are required.
-- For "customer" and "salesman", only `shopId` is required (must be valid).
+- For "customer", `shopId` is required (must be valid).
+- For "salesman", `enterpriseName` is required.
 
 ---
 
@@ -289,7 +380,7 @@ Content-Type: application/json
 }
 ```
 
-### Login
+### Login (All Roles)
 
 ```http
 POST https://wholesale-backend-cnfg.onrender.com/auth/login
@@ -301,165 +392,34 @@ Content-Type: application/json
 }
 ```
 
----
+### Create Product (Owner Only)
 
-## How to Test Owner Registration & Login
+```http
+POST https://wholesale-backend-cnfg.onrender.com/products
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  Content-Type: multipart/form-data
 
-You can test the owner registration and login endpoints using Postman, Thunder Client, or `curl`.
-
-### Register Owner
-
-- **Endpoint:**  
-  `POST https://wholesale-backend-cnfg.onrender.com/auth/register`
-- **Headers:**  
-  `Content-Type: application/json`
-- **Body Example:**
-  ```json
-  {
-    "name": "Owner Name",
-    "email": "owner@example.com",
-    "password": "password123",
-    "role": "owner",
-    "shopId": "shop001",
-    "shopName": "Super Mart",
-    "shopType": "RetailPackStore",
-    "address": "123 Main Street, City, State"
-  }
-  ```
-
-### Login Owner
-
-- **Endpoint:**  
-  `POST https://wholesale-backend-cnfg.onrender.com/auth/login`
-- **Headers:**  
-  `Content-Type: application/json`
-- **Body Example:**
-  ```json
-  {
-    "email": "owner@example.com",
-    "password": "password123"
-  }
-  ```
-
-**How to check:**
-
-- Use Postman or similar tool to send the above requests.
-- On success, you will get a JSON response with a message (for registration) or a JWT token and user/shop info (for login).
-- If there are errors, you will get a JSON error message.
-
-**Tip:**  
-You can also use `curl` from the command line:
-
-```sh
-curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Owner Name","email":"owner@example.com","password":"password123","role":"owner","shopId":"shop001","shopName":"Super Mart","shopType":"RetailPackStore","address":"123 Main Street, City, State"}'
+Body (form-data):
+  title: Premium Basmati Rice
+  image: [choose file: rice.jpg/png/jpeg/webp/gif/svg]
+  price: 1200
+  discount: 10
+  description: High quality basmati rice, 5kg pack.
 ```
 
-```sh
-curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"owner@example.com","password":"password123"}'
+### Get My Products (Owner Only)
+
+```http
+GET https://wholesale-backend-cnfg.onrender.com/products
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
 ```
 
-If you get a success response, your endpoint is working!
+### Get All Products (Public)
 
----
-
-## Postman API Endpoint Check Data
-
-### Register Owner
-
-**POST** `https://wholesale-backend-cnfg.onrender.com/auth/register`
-
-```json
-{
-  "name": "Owner Name",
-  "email": "owner@example.com",
-  "password": "password123",
-  "role": "owner",
-  "shopId": "shop001",
-  "shopName": "Super Mart",
-  "shopType": "RetailPackStore",
-  "address": "123 Main Street, City, State"
-}
+```http
+GET https://wholesale-backend-cnfg.onrender.com/products/all
 ```
-
----
-
-### Register Customer
-
-**POST** `https://wholesale-backend-cnfg.onrender.com/auth/register`
-
-```json
-{
-  "name": "Customer Name",
-  "email": "customer@example.com",
-  "password": "password123",
-  "role": "customer",
-  "shopId": "shop001"
-}
-```
-
----
-
-### Register Salesman
-
-**POST** `https://wholesale-backend-cnfg.onrender.com/auth/register`
-
-```json
-{
-  "name": "Salesman Name",
-  "email": "salesman@example.com",
-  "password": "salesman123",
-  "role": "salesman",
-  "enterpriseName": "ABC Enterprises"
-}
-```
-
----
-
-### Login Owner
-
-**POST** `https://wholesale-backend-cnfg.onrender.com/auth/login`
-
-```json
-{
-  "email": "owner@example.com",
-  "password": "password123"
-}
-```
-
----
-
-### Login Customer
-
-**POST** `https://wholesale-backend-cnfg.onrender.com/auth/login`
-
-```json
-{
-  "email": "customer@example.com",
-  "password": "password123"
-}
-```
-
----
-
-### Login Salesman
-
-**POST** `https://wholesale-backend-cnfg.onrender.com/auth/login`
-
-```json
-{
-  "email": "salesman@example.com",
-  "password": "salesman123"
-}
-```
-
----
-
-## More Endpoints
-
-Additional endpoints for products, orders, slots, etc. will follow a similar pattern and will be documented as implemented.
 
 ---
