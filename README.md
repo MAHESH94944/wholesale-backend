@@ -90,8 +90,7 @@ https://wholesale-backend-cnfg.onrender.com/
 ```json
 {
   "email": "owner@example.com",
-  "password": "password123",
-  "role": "owner" // or "customer" or "salesman"
+  "password": "password123"
 }
 ```
 
@@ -114,7 +113,7 @@ https://wholesale-backend-cnfg.onrender.com/
   }
   ```
 
-- **Customer/Salesman:**
+- **Customer:**
 
   ```json
   {
@@ -298,8 +297,7 @@ Content-Type: application/json
 
 {
   "email": "owner@example.com",
-  "password": "password123",
-  "role": "owner"
+  "password": "password123"
 }
 ```
 
@@ -339,8 +337,7 @@ You can test the owner registration and login endpoints using Postman, Thunder C
   ```json
   {
     "email": "owner@example.com",
-    "password": "password123",
-    "role": "owner"
+    "password": "password123"
   }
   ```
 
@@ -362,7 +359,7 @@ curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/register \
 ```sh
 curl -X POST https://wholesale-backend-cnfg.onrender.com/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"owner@example.com","password":"password123","role":"owner"}'
+  -d '{"email":"owner@example.com","password":"password123"}'
 ```
 
 If you get a success response, your endpoint is working!
@@ -429,8 +426,7 @@ If you get a success response, your endpoint is working!
 ```json
 {
   "email": "owner@example.com",
-  "password": "password123",
-  "role": "owner"
+  "password": "password123"
 }
 ```
 
@@ -443,8 +439,7 @@ If you get a success response, your endpoint is working!
 ```json
 {
   "email": "customer@example.com",
-  "password": "password123",
-  "role": "customer"
+  "password": "password123"
 }
 ```
 
@@ -457,8 +452,7 @@ If you get a success response, your endpoint is working!
 ```json
 {
   "email": "salesman@example.com",
-  "password": "salesman123",
-  "role": "salesman"
+  "password": "salesman123"
 }
 ```
 

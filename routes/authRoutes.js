@@ -128,12 +128,14 @@ router.post("/register", async (req, res) => {
 
 // Login route
 router.post("/login", async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
   try {
-    if (!email || !password || !role) {
-      return res.status(400).json({ message: "All fields are required." });
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
     }
-    const user = await User.findOne({ email, role });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
@@ -147,7 +149,7 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    if (role === "owner") {
+    if (user.role === "owner") {
       return res.json({
         token,
         user: {
@@ -160,7 +162,7 @@ router.post("/login", async (req, res) => {
           address: user.address,
         },
       });
-    } else if (role === "salesman") {
+    } else if (user.role === "salesman") {
       return res.json({
         token,
         user: {
