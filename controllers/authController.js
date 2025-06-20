@@ -1,7 +1,7 @@
-const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const router = express.Router();
+
+const { isEmailDeliverable } = require("../utils/helper");
 
 module.exports.register = async (req, res) => {
   const {
@@ -21,6 +21,14 @@ module.exports.register = async (req, res) => {
     }
     if (!["customer", "salesman", "owner"].includes(role)) {
       return res.status(400).json({ message: "Invalid role." });
+    }
+
+    // Check if email is deliverable (exists)
+    const isValidEmail = await isEmailDeliverable(email);
+    if (!isValidEmail) {
+      return res.status(400).json({
+        message: "Email address does not exist or is not deliverable.",
+      });
     }
 
     // Owner registration

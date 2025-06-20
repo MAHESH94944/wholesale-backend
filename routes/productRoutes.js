@@ -2,7 +2,7 @@ const express = require("express");
 const { verifyToken } = require("../middleware/auth");
 const productController = require("../controllers/productController");
 const router = express.Router();
-const upload = require("../utils/multer");
+const upload = require("../utils/productMulter");
 
 router.post(
   "/",

@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
+const DEFAULT_PROFILE_IMAGE =
+  "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
@@ -37,6 +40,7 @@ const userSchema = new mongoose.Schema({
     },
   },
   googleId: String,
+  profileImage: { type: String, default: DEFAULT_PROFILE_IMAGE },
 });
 
 userSchema.pre("save", async function (next) {
@@ -49,5 +53,8 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.comparePassword = function (candidate) {
   return bcrypt.compare(candidate, this.password);
 };
+
+module.exports = mongoose.model("User", userSchema);
+
 
 module.exports = mongoose.model("User", userSchema);

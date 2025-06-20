@@ -64,6 +64,10 @@ https://wholesale-backend-cnfg.onrender.com/
 #### Error Responses
 
 - Missing fields, duplicate email/shopId, invalid shopId, etc.
+- **Email address does not exist or is not deliverable.**
+
+> **Note:**  
+> Registration checks if the email is real/deliverable using an external email verification service. Registration will fail if the email does not exist.
 
 ---
 
@@ -230,6 +234,143 @@ https://wholesale-backend-cnfg.onrender.com/
   ]
 }
 ```
+
+---
+
+### Get Products of My Shop (Customer Only)
+
+**GET** `/user/shop-products`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/shop-products`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+
+**Note:**  
+Only users with role `"customer"` can access this endpoint. Salesmen will receive a forbidden error.
+
+**Response:**
+
+```json
+{
+  "products": [
+    {
+      "_id": "PRODUCT_ID",
+      "title": "Premium Basmati Rice",
+      "image": "data:image/jpeg;base64,...",
+      "price": 1200,
+      "discount": 10,
+      "description": "High quality basmati rice, 5kg pack.",
+      "owner": "OWNER_ID",
+      "createdAt": "2024-06-17T12:00:00.000Z",
+      "__v": 0
+    }
+    // ...more products
+  ]
+}
+```
+
+---
+
+## Profile Endpoints
+
+### Get My Profile (Customer Only)
+
+**GET** `/user/profile`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/profile`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+
+**Response:**
+
+```json
+{
+  "name": "Customer Name",
+  "email": "customer@example.com",
+  "shopId": "shop001",
+  "profileImage": "https://cdn-icons-png.flaticon.com/512/149/149071.png" // default blank avatar if not set
+}
+```
+
+---
+
+### Update My Profile Image (Customer Only)
+
+**PUT** `/user/profile/image`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/profile/image`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: multipart/form-data`
+
+**Body (form-data):**
+
+- `profileImage`: file (**png, jpg, jpeg, webp, gif, svg**; required)
+
+**Success Response:**
+
+```json
+{
+  "message": "Profile image updated successfully.",
+  "profileImage": "data:image/png;base64,..."
+}
+```
+
+**Error Response:**
+
+```json
+{
+  "message": "Profile image is required."
+}
+```
+
+---
+
+### Update My Shop ID (Customer Only)
+
+**PUT** `/user/profile/shopid`  
+**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/profile/shopid`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: application/json`
+
+**Body:**
+
+```json
+{
+  "shopId": "shop002"
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "message": "Shop ID updated successfully.",
+  "shopId": "shop002"
+}
+```
+
+**Error Response (if shopId doesn't exist):**
+
+```json
+{
+  "message": "Shop ID doesn't exist."
+}
+```
+
+---
+
+**Note:**
+
+- Only customers can view and update their profile/shopId.
+- After updating shopId, use `/user/shop-products` to see products from the new shop.
+- By default, all users have a blank profile image (`https://cdn-icons-png.flaticon.com/512/149/149071.png`) until they upload their own.
 
 ---
 
@@ -420,6 +561,48 @@ Headers:
 
 ```http
 GET https://wholesale-backend-cnfg.onrender.com/products/all
+```
+
+### Get Products of My Shop (Customer Only)
+
+```http
+GET https://wholesale-backend-cnfg.onrender.com/user/shop-products
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+```
+
+### Get My Profile (Customer Only)
+
+```http
+GET https://wholesale-backend-cnfg.onrender.com/user/profile
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+```
+
+### Update My Profile Image (Customer Only)
+
+```http
+PUT https://wholesale-backend-cnfg.onrender.com/user/profile/image
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  Content-Type: multipart/form-data
+
+Body (form-data):
+  profileImage: [choose file: png/jpg/jpeg/webp/gif/svg]
+```
+
+### Update My Shop ID (Customer Only)
+
+```http
+PUT https://wholesale-backend-cnfg.onrender.com/user/profile/shopid
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  Content-Type: application/json
+
+Body:
+{
+  "shopId": "shop002"
+}
 ```
 
 ---
