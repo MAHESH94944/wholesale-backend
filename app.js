@@ -20,6 +20,8 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/user", userRoutes);
+app.use("/owner", require("./routes/ownerRoutes"));
+app.use("/salesman", require("./routes/salesmanRoutes"));
 
 app.get("/", (req, res) => {
   res.send("Smart Wholesale Shop API is running.");
