@@ -3,7 +3,7 @@ const Product = require("../models/Product");
 
 module.exports.updateProfile = async (req, res) => {    
     try {
-        const { name, password, address, enterpriseName } = req.body;
+        const { name, email, password, address, enterpriseName } = req.body;
         const user = await User.findById(req.user.id);
         const userId = req.user.id;
 
@@ -32,6 +32,7 @@ module.exports.updateProfile = async (req, res) => {
         {
             profileImage : `data:${imageMime};base64,${imageBase64}` || user.profileImage,
             name: name || user.name,
+            email: email || user.email,
             password: hashedPassword || user.password,
             address: address || user.address,
             enterpriseName: enterpriseName || user.enterpriseName
