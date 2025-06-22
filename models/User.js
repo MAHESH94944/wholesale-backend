@@ -45,6 +45,12 @@ const userSchema = new mongoose.Schema({
     default: 0,
     maxLength: 10,
   },
+  phIsVisible: {
+    type: Boolean,
+    default: false,
+  },
+  isVerified: { type: Boolean, default: false },
+  verificationCode: { type: String, default: "" },
   googleId: String,
   profileImage: { type: String, default: DEFAULT_PROFILE_IMAGE },
 });

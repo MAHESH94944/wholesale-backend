@@ -30,16 +30,24 @@ exports.getShopProducts = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    if (!user || user.role !== "customer") {
+    if (!user) {
       return res
         .status(403)
-        .json({ message: "Only customers can view profile." });
+        .json({ message: "Not Registered Yet" });
     }
     res.json({
       name: user.name,
       email: user.email,
       shopId: user.shopId,
       profileImage: user.profileImage || null,
+      role: user.role,
+      address: user.address || null,
+      phoneNumber: user.phoneNumber || null,
+      phIsVisible: user.phIsVisible || false,
+      isVerified: user.isVerified || false,
+      shopName: user.shopName || null,
+      shopType: user.shopType || null,
+      enterpriseName: user.enterpriseName || null,
     });
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch profile." });
