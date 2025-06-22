@@ -97,3 +97,4 @@ exports.updateProfileImage = async (req, res) => {
     res.status(500).json({ message: "Failed to update profile image." });
   }
 };
+
