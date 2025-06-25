@@ -21,10 +21,4 @@ router.put(
   userController.updateProfileImage
 );
 
-<<<<<<< HEAD
 module.exports = router;
-=======
-
-
-module.exports = router;
->>>>>>> b1dc54608a6d4ceaa0732260c10021c07d6968b0
