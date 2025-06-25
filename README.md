@@ -604,5 +604,62 @@ Body:
   "shopId": "shop002"
 }
 ```
+### Owner Profile Update
+
+**PUT** `/owner/update-profile`  
+**Controller:** `ownerController.updateProfile`
+
+**Headers:**
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: multipart/form-data`
+
+**Body (form-data):**
+- `profileImage`: file (optional)
+- `name`: string (optional)
+- `password`: string (optional)
+- `shopName`: string (optional)
+- `address`: string (optional)
+- `phoneNumber`: number (optional)
+- `phIsVisible`: boolean (optional)
+
+**Success Response:**
+```json
+{
+  "message": "Profile updated successfully.",
+  "user": {
+    // updated user object
+  }
+}
+
+```
+
+
+### Salesman Profile Update
+
+**PUT** `/salesman/update-profile`  
+**Controller:** `salesmanController.updateProfile`
+
+**Headers:**
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: multipart/form-data`
+
+**Body (form-data):**
+- `profileImage`: file (optional)
+- `name`: string (optional)
+- `password`: string (optional)
+- `enterpriseName`: string (optional)
+- `phoneNumber`: number (optional)
+
+**Success Response:**
+```json
+{
+  "message": "Profile updated successfully.",
+  "user": {
+    // updated user object
+  }
+}
+
+
+```
 
 ---

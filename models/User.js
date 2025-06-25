@@ -39,6 +39,18 @@ const userSchema = new mongoose.Schema({
       return this.role === "salesman";
     },
   },
+  phoneNumber: {
+    type: Number,
+    isVisible: false,
+    default: 0,
+    maxLength: 10,
+  },
+  phIsVisible: {
+    type: Boolean,
+    default: false,
+  },
+  isVerified: { type: Boolean, default: false },
+  verificationCode: { type: String, default: "" },
   googleId: String,
   profileImage: { type: String, default: DEFAULT_PROFILE_IMAGE },
 });
