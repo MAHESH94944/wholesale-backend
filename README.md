@@ -1,6 +1,6 @@
 # Smart Wholesale Shop Backend API
 
-This document describes all available endpoints for authentication, user management, and product management in the Smart Wholesale Shop backend.
+This document describes all available endpoints and features for authentication, user management, product management, and profile management in the Smart Wholesale Shop backend.
 
 ---
 
@@ -16,8 +16,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ### Register (Customer, Salesman, Owner)
 
-**POST** `/auth/register`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/auth/register`
+**POST** `/auth/register`
 
 #### Request Body
 
@@ -73,8 +72,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ### Login (All Roles)
 
-**POST** `/auth/login`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/auth/login`
+**POST** `/auth/login`
 
 #### Request Body
 
@@ -140,8 +138,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ### Create Product (Owner Only)
 
-**POST** `/products`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/products`
+**POST** `/products`
 
 **Headers:**
 
@@ -179,8 +176,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ### Get My Products (Owner Only)
 
-**GET** `/products`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/products`
+**GET** `/products`
 
 **Headers:**
 
@@ -211,8 +207,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ### Get All Products (Public)
 
-**GET** `/products/all`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/products/all`
+**GET** `/products/all`
 
 **Response:**
 
@@ -239,8 +234,7 @@ https://wholesale-backend-cnfg.onrender.com/
 
 ### Get Products of My Shop (Customer Only)
 
-**GET** `/user/shop-products`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/shop-products`
+**GET** `/user/shop-products`
 
 **Headers:**
 
@@ -276,8 +270,7 @@ Only users with role `"customer"` can access this endpoint. Salesmen will receiv
 
 ### Get My Profile (Customer Only)
 
-**GET** `/user/profile`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/profile`
+**GET** `/user/profile`
 
 **Headers:**
 
@@ -290,7 +283,15 @@ Only users with role `"customer"` can access this endpoint. Salesmen will receiv
   "name": "Customer Name",
   "email": "customer@example.com",
   "shopId": "shop001",
-  "profileImage": "https://cdn-icons-png.flaticon.com/512/149/149071.png" // default blank avatar if not set
+  "profileImage": "https://cdn-icons-png.flaticon.com/512/149/149071.png", // default blank avatar if not set
+  "role": "customer",
+  "address": null,
+  "phoneNumber": null,
+  "phIsVisible": false,
+  "isVerified": false,
+  "shopName": null,
+  "shopType": null,
+  "enterpriseName": null
 }
 ```
 
@@ -298,8 +299,7 @@ Only users with role `"customer"` can access this endpoint. Salesmen will receiv
 
 ### Update My Profile Image (Customer Only)
 
-**PUT** `/user/profile/image`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/profile/image`
+**PUT** `/user/profile/image`
 
 **Headers:**
 
@@ -331,8 +331,7 @@ Only users with role `"customer"` can access this endpoint. Salesmen will receiv
 
 ### Update My Shop ID (Customer Only)
 
-**PUT** `/user/profile/shopid`  
-**Full URL:** `https://wholesale-backend-cnfg.onrender.com/user/profile/shopid`
+**PUT** `/user/profile/shopid`
 
 **Headers:**
 
@@ -366,17 +365,74 @@ Only users with role `"customer"` can access this endpoint. Salesmen will receiv
 
 ---
 
-**Note:**
+## Owner Profile Update
+
+**PUT** `/owner/update-profile`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: multipart/form-data`
+
+**Body (form-data):**
+
+- `profileImage`: file (optional)
+- `name`: string (optional)
+- `password`: string (optional)
+- `shopName`: string (optional)
+- `address`: string (optional)
+- `phoneNumber`: number (optional)
+- `phIsVisible`: boolean (optional)
+
+**Success Response:**
+
+```json
+{
+  "message": "Profile updated successfully.",
+  "user": {
+    // updated user object
+  }
+}
+```
+
+---
+
+## Salesman Profile Update
+
+**PUT** `/salesman/update-profile`
+
+**Headers:**
+
+- `Authorization: Bearer <JWT_TOKEN>`
+- `Content-Type: multipart/form-data`
+
+**Body (form-data):**
+
+- `profileImage`: file (optional)
+- `name`: string (optional)
+- `password`: string (optional)
+- `enterpriseName`: string (optional)
+- `phoneNumber`: number (optional)
+
+**Success Response:**
+
+```json
+{
+  "message": "Profile updated successfully.",
+  "user": {
+    // updated user object
+  }
+}
+```
+
+---
+
+## Notes
 
 - Only customers can view and update their profile/shopId.
 - After updating shopId, use `/user/shop-products` to see products from the new shop.
 - By default, all users have a blank profile image (`https://cdn-icons-png.flaticon.com/512/149/149071.png`) until they upload their own.
-
----
-
-## (Planned) Order & Slot Endpoints
-
-> Endpoints for orders and slots will be added as implemented.
+- `/products/all` is public and can be used for product browsing without login.
 
 ---
 
@@ -604,62 +660,39 @@ Body:
   "shopId": "shop002"
 }
 ```
+
 ### Owner Profile Update
 
-**PUT** `/owner/update-profile`  
-**Controller:** `ownerController.updateProfile`
+```http
+PUT https://wholesale-backend-cnfg.onrender.com/owner/update-profile
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  Content-Type: multipart/form-data
 
-**Headers:**
-- `Authorization: Bearer <JWT_TOKEN>`
-- `Content-Type: multipart/form-data`
-
-**Body (form-data):**
-- `profileImage`: file (optional)
-- `name`: string (optional)
-- `password`: string (optional)
-- `shopName`: string (optional)
-- `address`: string (optional)
-- `phoneNumber`: number (optional)
-- `phIsVisible`: boolean (optional)
-
-**Success Response:**
-```json
-{
-  "message": "Profile updated successfully.",
-  "user": {
-    // updated user object
-  }
-}
-
+Body (form-data):
+  profileImage: [choose file] (optional)
+  name: string (optional)
+  password: string (optional)
+  shopName: string (optional)
+  address: string (optional)
+  phoneNumber: number (optional)
+  phIsVisible: boolean (optional)
 ```
-
 
 ### Salesman Profile Update
 
-**PUT** `/salesman/update-profile`  
-**Controller:** `salesmanController.updateProfile`
+```http
+PUT https://wholesale-backend-cnfg.onrender.com/salesman/update-profile
+Headers:
+  Authorization: Bearer <JWT_TOKEN>
+  Content-Type: multipart/form-data
 
-**Headers:**
-- `Authorization: Bearer <JWT_TOKEN>`
-- `Content-Type: multipart/form-data`
-
-**Body (form-data):**
-- `profileImage`: file (optional)
-- `name`: string (optional)
-- `password`: string (optional)
-- `enterpriseName`: string (optional)
-- `phoneNumber`: number (optional)
-
-**Success Response:**
-```json
-{
-  "message": "Profile updated successfully.",
-  "user": {
-    // updated user object
-  }
-}
-
-
+Body (form-data):
+  profileImage: [choose file] (optional)
+  name: string (optional)
+  password: string (optional)
+  enterpriseName: string (optional)
+  phoneNumber: number (optional)
 ```
 
 ---
