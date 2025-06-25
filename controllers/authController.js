@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
 const { isEmailDeliverable } = require("../utils/helper");
 
 module.exports.register = async (req, res) => {
